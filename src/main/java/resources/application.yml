@@ -1,0 +1,21 @@
+info:
+  app:
+    name: '@project.name@'
+    description: '@project.description@'
+    version: '@project.version@'
+server:
+  tomcat:
+    relaxed-path-chars:
+      - '['
+      - ']'
+    relaxed-query-chars:
+      - '['
+      - ']'
+  max-http-request-header-size: "40KB"
+  shutdown: graceful
+  port: ${SERVER_PORT:8080}
+  servlet:
+    contextPath: /
+  parallelism: ${SERVER_PARALELISM}
+user:
+  timezone: ${TIMEZONE}
