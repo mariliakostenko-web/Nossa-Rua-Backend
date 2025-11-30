@@ -13,6 +13,9 @@ public class AdicionarIncidenteDTO {
     @NotBlank(message = "Data é obrigatória")
     private String data;
 
+    @NotBlank(message = "Título é obrigatória")
+    private String titulo;
+
     @NotBlank(message = "Endereço é obrigatório")
     private String lat;
 

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class IncidenteDTO {
     private Long id;
+    private String titulo;
     private String data;
     private String lat;
     private String lng;

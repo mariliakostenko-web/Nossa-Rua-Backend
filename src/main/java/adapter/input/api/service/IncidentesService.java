@@ -2,6 +2,7 @@ package adapter.input.api.service;
 
 import adapter.input.api.dto.AdicionarIncidenteDTO;
 import adapter.input.api.dto.IncidenteDTO;
+import adapter.input.api.response.MensagemResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,23 +20,19 @@ import java.util.List;
 public class IncidentesService {
 
     @Transactional
-    public String adicionarIncidente(AdicionarIncidenteDTO dados) {
+    public MensagemResponse adicionarIncidente(AdicionarIncidenteDTO dados) {
         log.info("Processando adição de incidente: {}", dados);
 
         validarDados(dados);
         validarCoordenadas(dados.getLat(), dados.getLng());
 
         String mensagem = String.format(
-                "Incidente adicionado com sucesso: Data: %s, Latitude: %s, Longitude: %s, Categoria: %s, Observação: %s",
-                dados.getData(),
-                dados.getLat(),
-                dados.getLng(),
-                dados.getCategoria() != null ? dados.getCategoria() : "Não informada",
-                dados.getObservacao() != null ? dados.getObservacao() : "Sem observações"
+                "Incidente '%s' adicionado com sucesso",
+                dados.getTitulo()
         );
 
         log.info("Incidente processado com sucesso: {}", mensagem);
-        return mensagem;
+        return new MensagemResponse(mensagem);
     }
 
     public List<IncidenteDTO> listarIncidentes() {
@@ -48,6 +45,7 @@ public class IncidentesService {
 
         incidentes.add(new IncidenteDTO(
                 1L,
+                "Sem placa",
                 "13/11/2025 08:30:00",
                 "-23.539288",
                 "-47.466292",
@@ -57,6 +55,7 @@ public class IncidentesService {
 
         incidentes.add(new IncidenteDTO(
                 2L,
+                "Buraco na via",
                 "13/11/2025 10:15:00",
                 "-23.537744",
                 "-47.466242",
@@ -66,6 +65,7 @@ public class IncidentesService {
 
         incidentes.add(new IncidenteDTO(
                 3L,
+                "Vegetação alta na via",
                 "13/11/2025 12:45:00",
                 "-23.536264",
                 "-47.465272",
@@ -75,6 +75,7 @@ public class IncidentesService {
 
         incidentes.add(new IncidenteDTO(
                 4L,
+                "Animal atropelado",
                 "13/11/2025 14:20:00",
                 "-23.535508",
                 "-47.467818",
@@ -84,6 +85,7 @@ public class IncidentesService {
 
         incidentes.add(new IncidenteDTO(
                 5L,
+                "Falta de placa",
                 "13/11/2025 16:00:00",
                 "-23.537598",
                 "-47.465340",
@@ -93,6 +95,7 @@ public class IncidentesService {
 
         incidentes.add(new IncidenteDTO(
                 6L,
+                "Buraco grande",
                 "13/11/2025 17:30:00",
                 "-23.535039",
                 "-47.466158",
@@ -126,7 +129,6 @@ public class IncidentesService {
 
     private void validarFormatoData(String data) {
         try {
-            // Adapte o formato conforme necessário (exemplo: "dd/MM/yyyy HH:mm:ss")
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
             LocalDateTime.parse(data, formatter);
         } catch (DateTimeParseException e) {
@@ -150,7 +152,7 @@ public class IncidentesService {
 
         } catch (NumberFormatException e) {
             log.error("Coordenadas inválidas - Lat: {}, Lng: {}", lat, lng);
-            throw new IllegalArgumentException("Endereço deve ter valores válidos");
+            throw new IllegalArgumentException("Coordenadas devem ter valores numéricos válidos");
         }
     }
 }
